@@ -1,3 +1,10 @@
+networks:
+  app_net:
+    driver: bridge
+    # ipam:
+    #   config:
+    #     - subnet: 192.168.24.0/24
+
 volumes:
   strata_blog_local_postgres_data: {}
   strata_blog_local_postgres_data_backups: {}
@@ -20,8 +27,10 @@ services:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
     ports:
-      - '8000:8000'
+      - "8000:8000"
     command: /start
+    networks:
+      - app_net
 
   postgres:
     build:
@@ -34,20 +43,23 @@ services:
       - strata_blog_local_postgres_data_backups:/backups
     env_file:
       - ./.envs/.local/.postgres
+    networks:
+      - app_net
 
   mailpit:
     image: docker.io/axllent/mailpit:latest
     container_name: strata_blog_local_mailpit
     ports:
       - "8025:8025"
+    networks:
+      - app_net
 
   redis:
     image: docker.io/redis:6
     container_name: strata_blog_local_redis
-    
+
     volumes:
       - strata_blog_local_redis_data:/data
-    
 
   celeryworker:
     <<: *django
@@ -76,7 +88,7 @@ services:
     image: strata_blog_local_flower
     container_name: strata_blog_local_flower
     ports:
-      - '5555:5555'
+      - "5555:5555"
     command: /start-flower
 
   node:
@@ -93,4 +105,24 @@ services:
       - /app/node_modules
     command: npm run dev
     ports:
-      - '3000:3000'
+      - "3000:3000"
+    networks:
+      - app_net
+
+  nginx-proxy:
+    build:
+      context: .
+      dockerfile: ./compose/local/nginx/Dockerfile
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./strata_blog/media:/usr/share/nginx/media
+      - ./compose/local/certs:/etc/nginx/certs
+    restart: always
+    depends_on:
+      - mailpit
+      - node
+    networks:
+      - app_net

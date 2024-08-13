@@ -1,11 +1,10 @@
 from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django.contrib.auth import forms as admin_forms
-from django.forms import EmailField
+from django.forms import EmailField, ModelForm, ImageField
 from django.utils.translation import gettext_lazy as _
 
-from .models import User
-
+from .models import User, Post, Comment
 
 class UserAdminChangeForm(admin_forms.UserChangeForm):
     class Meta(admin_forms.UserChangeForm.Meta):  # type: ignore[name-defined]
@@ -42,3 +41,15 @@ class UserSocialSignupForm(SocialSignupForm):
     Default fields will be added automatically.
     See UserSignupForm otherwise.
     """
+
+class PostForm(ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'short_description', 'content', 'image_path']
+
+    image_path = ImageField(required=False)
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content', 'author_name']

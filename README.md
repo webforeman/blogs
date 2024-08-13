@@ -1,13 +1,61 @@
-# strata_blog
-
-Behold My Awesome Project!
+# Example posts app
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 License: MIT
 
-## Settings
+## Getting Started (with docker compose)
+
+1. Build docker images
+
+```bash
+docker compose -f docker-compose.local.yml build --no-cache
+```
+
+2. Make migrations and check it
+
+```bash
+docker compose -f docker-compose.local.yml run django python manage.py makemigrations
+docker compose -f docker-compose.local.yml run django python manage.py migrate
+docker compose -f docker-compose.local.yml run django python manage.py showmigrations
+```
+
+3. Seed database
+
+```bash
+docker compose -f docker-compose.local.yml run django python manage.py seed
+```
+
+4. Create superuser
+
+```bash
+docker compose -f docker-compose.local.yml run django python manage.py createsuperuser
+```
+
+5. Run server
+
+```bash
+docker compose -f docker-compose.local.yml up --build -d --remove-orphans
+```
+
+6. Open and login `http://127.0.0.1:3000/accounts/login/` with superuser login and password
+
+7. Confirm superuser `http://127.0.0.1:8025` follow link in email
+
+8. Check API endpoints and filters:
+
+`http://127.0.0.1:3000/api/posts/`
+
+`http://127.0.0.1:3000/api/posts/?sort_by=created_at`
+
+`http://127.0.0.1:3000/api/posts/?sort_by=title`
+
+`http://127.0.0.1:3000/api/posts/?author_id=1`
+
+`http://127.0.0.1:3000/api/posts/?page=1&page_size=10`
+
+## Cookiecutter Instruction
 
 Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings.html).
 
@@ -104,3 +152,32 @@ Bootstrap v5 is installed using npm and customised by tweaking your variables in
 You can find a list of available variables [in the bootstrap source](https://github.com/twbs/bootstrap/blob/v5.1.3/scss/_variables.scss), or get explanations on them in the [Bootstrap docs](https://getbootstrap.com/docs/5.1/customize/sass/).
 
 Bootstrap's javascript as well as its dependencies are concatenated into a single file: `static/js/vendors.js`.
+
+### All commands for dev
+
+```bash
+
+# Remove compose with volumes
+docker compose -f docker-compose.local.yml down -v
+
+# Build compose
+docker compose -f docker-compose.local.yml build --no-cache
+
+# Run compose
+docker compose -f docker-compose.local.yml up --build -d --remove-orphans
+
+# Make migrations and check it
+docker compose -f docker-compose.local.yml run django python manage.py makemigrations
+docker compose -f docker-compose.local.yml run django python manage.py migrate
+docker compose -f docker-compose.local.yml run django python manage.py showmigrations
+
+# Create superuser
+docker compose -f docker-compose.local.yml run django python manage.py createsuperuser
+
+# Seed database script from /users/management/commands/seed.py
+docker compose -f docker-compose.local.yml run django python manage.py seed
+
+# Generate localhost certificates
+mkcert -cert-file ./compose/local/certs/localhost.pem -key-file ./compose/local/certs/localhost-key.pem localhost 127.0.0.1 0.0.0.0 ::1
+
+```

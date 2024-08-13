@@ -6,23 +6,20 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include
 from django.urls import path
 from django.views import defaults as default_views
-from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
+from strata_blog.users.views import HomePageView, BlogDetailView, CreatePostView
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    path(
-        "about/",
-        TemplateView.as_view(template_name="pages/about.html"),
-        name="about",
-    ),
+    path("", HomePageView.as_view(), name="home"),
+    path('create/', CreatePostView.as_view(), name='create_post'),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("users/", include("strata_blog.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
+    path('posts/<int:pk>/', BlogDetailView.as_view(), name='blog_detail'),
     # Your stuff: custom urls includes go here
     # ...
     # Media files

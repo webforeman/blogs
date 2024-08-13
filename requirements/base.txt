@@ -25,3 +25,6 @@ django-cors-headers==4.4.0  # https://github.com/adamchainz/django-cors-headers
 # DRF-spectacular for api documentation
 drf-spectacular==0.27.2  # https://github.com/tfranzel/drf-spectacular
 django-webpack-loader==3.1.0  # https://github.com/django-webpack/django-webpack-loader
+
+# For bd seed
+Faker==27.0.0

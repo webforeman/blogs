@@ -1,15 +1,18 @@
-const { merge } = require('webpack-merge');
-const commonConfig = require('./common.config');
+const { merge } = require("webpack-merge");
+const commonConfig = require("./common.config");
+
+console.log(process.env.NODE_ENV);
 
 module.exports = merge(commonConfig, {
-  mode: 'development',
-  devtool: 'inline-source-map',
+  mode: "development",
+  devtool: "inline-source-map",
   devServer: {
     port: 3000,
+    allowedHosts: ["localhost", "127.0.0.1", "0.0.0.0", "app"],
     proxy: [
       {
-        context: ['/'],
-        target: 'http://django:8000',
+        context: ["/"],
+        target: "http://django:8000",
       },
     ],
     client: {

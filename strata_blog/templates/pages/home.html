@@ -1,3 +1,65 @@
 {% extends "base.html" %}
 
+{% load custom_filters %}
 
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container mt-5">
+  <h1 class="mb-4">All posts</h1>
+
+  <!-- Форма фильтрации -->
+  <!-- <form method="get" class="mb-4">
+    <div class="form-group">
+      <label for="sort_by">Sort by:</label>
+      <select name="sort_by" id="sort_by" class="form-control">
+        <option value="created_at">Date Created</option>
+        <option value="title">Title</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="author_id">Author ID:</label>
+      <input type="number" name="author_id" id="author_id" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Apply Filters</button>
+  </form> -->
+
+  {% for post in posts %}
+  {% if post.id %}
+  <div class="card mb-3">
+    <a href="{% url 'blog_detail' post.id %}">
+      <img src="{{ post.image_path|media_url_or_full }}" class="card-img-top" alt="{{ post.title }}" width="100%"
+        height="424px" style="object-fit: fill;">
+    </a>
+
+    <div class="card-body">
+      <strong>{{ post.author.name }}</strong>
+      <h5 class="card-title">{{ post.title }}</h5>
+      <p class="card-text">{{ post.short_description }}</p>
+      <p class="card-text"><small class="text-muted">Created {{ post.created_at|slice:":10" }}</small></p>
+    </div>
+  </div>
+  {% else %}
+  {% endif %}
+  {% endfor %}
+
+  <!-- Пагинация -->
+  <div class="pagination d-flex flex-row bd-highlight mb-3 justify-content-center align-items-center mt-4 gap-1">
+    {% if current_page > 1 %}
+    <a class="btn btn-outline-primary mr-2"
+      href="?page=1&page_size={{ page_size }}&{{ request.GET.urlencode }}">First</a>
+    <a class="btn btn-outline-primary mr-2"
+      href="?page={{ current_page|add:-1 }}&page_size={{ page_size }}&{{ request.GET.urlencode }}">Previous</a>
+    {% endif %}
+
+    <span class="mx-2 d-flex align-items-center">Page {{ current_page }} of {{ total_pages }}</span>
+
+    {% if current_page < total_pages %} <a class="btn btn-outline-primary mr-2"
+      href="?page={{ current_page|add:1 }}&page_size={{ page_size }}&{{ request.GET.urlencode }}">Next</a>
+      <a class="btn btn-outline-primary mr-2"
+        href="?page={{ total_pages }}&page_size={{ page_size }}&{{ request.GET.urlencode }}">Last</a>
+      {% endif %}
+  </div>
+</div>
+{% endblock %}

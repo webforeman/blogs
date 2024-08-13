@@ -281,3 +281,5 @@ webpack-stats.json
 .env
 .envs/*
 !.envs/.local/
+
+*.pem
