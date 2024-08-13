@@ -7,6 +7,13 @@ License: MIT
 
 ## Getting Started (with docker compose)
 
+0. Clone repository and go to it
+
+```bash
+git clone https://github.com/webforeman/blogs
+cd blogs
+```
+
 1. Build docker images
 
 ```bash
@@ -39,21 +46,23 @@ docker compose -f docker-compose.local.yml run django python manage.py createsup
 docker compose -f docker-compose.local.yml up --build -d --remove-orphans
 ```
 
-6. Open and login `http://127.0.0.1:3000/accounts/login/` with superuser login and password
+6. [Open and login](http://127.0.0.1:3000/accounts/login/) with superuser login and password
 
-7. Confirm superuser `http://127.0.0.1:8025` follow link in email
+7. Confirm superuser follow link in [email](http://127.0.0.1:8025)
 
 8. Check API endpoints and filters:
 
-`http://127.0.0.1:3000/api/posts/`
+[http://127.0.0.1:3000/api/posts/](http://127.0.0.1:3000/api/posts/)
 
-`http://127.0.0.1:3000/api/posts/?sort_by=created_at`
+[http://127.0.0.1:3000/api/posts/1/](http://127.0.0.1:3000/api/posts/1/)
 
-`http://127.0.0.1:3000/api/posts/?sort_by=title`
+[http://127.0.0.1:3000/api/posts/?sort_by=created_at](http://127.0.0.1:3000/api/posts/?sort_by=created_at)
 
-`http://127.0.0.1:3000/api/posts/?author_id=1`
+[http://127.0.0.1:3000/api/posts/?sort_by=title](http://127.0.0.1:3000/api/posts/?sort_by=title)
 
-`http://127.0.0.1:3000/api/posts/?page=1&page_size=10`
+[http://127.0.0.1:3000/api/posts/?author_id=1](http://127.0.0.1:3000/api/posts/?author_id=1)
+
+[http://127.0.0.1:3000/api/posts/?page=1&page_size=10](http://127.0.0.1:3000/api/posts/?page=1&page_size=10)
 
 ## Cookiecutter Instruction
 

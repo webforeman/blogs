@@ -119,7 +119,7 @@ services:
       - "443:443"
     volumes:
       - ./strata_blog/media:/usr/share/nginx/media
-      - ./compose/local/certs:/etc/nginx/certs
+      # - ./compose/local/certs:/etc/nginx/certs
     restart: always
     depends_on:
       - mailpit
